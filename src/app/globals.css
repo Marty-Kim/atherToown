@@ -1,0 +1,190 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------ *
+ * Agent Town design tokens
+ * deep navy 기반 dark theme. accent 는 blue / violet / cyan.
+ * ------------------------------------------------------------------ */
+
+@theme {
+  --color-canvas: #080b16;
+  --color-surface-1: #0d1222;
+  --color-surface-2: #131b31;
+  --color-surface-3: #1a2440;
+  --color-line: #232f4f;
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', 'Pretendard', 'Noto Sans KR', sans-serif;
+  --font-mono: ui-monospace, 'JetBrains Mono', 'SFMono-Regular', Menlo, monospace;
+}
+
+@layer base {
+  :root {
+    --at-canvas: #080b16;
+    --at-surface-1: #0d1222;
+    --at-surface-2: #131b31;
+    --at-surface-3: #1a2440;
+    --at-border: #232f4f;
+    --at-border-soft: #1b2440;
+    --at-text: #e8edf9;
+    --at-text-muted: #96a3c2;
+    --at-text-dim: #6d7b9c;
+    --at-accent: #6d8bff;
+    --at-accent-2: #a78bfa;
+    --at-accent-3: #4fd1e0;
+    --at-radius: 10px;
+  }
+
+  * {
+    border-color: var(--at-border-soft);
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--at-canvas);
+    color: var(--at-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  /* 가독성 최우선: 본문 최소 13px, 보조 텍스트도 12px 아래로 내려가지 않음 */
+  .text-meta {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--at-text-muted);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--at-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #26324f;
+    border-radius: 8px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #35446b;
+    background-clip: content-box;
+  }
+}
+
+@layer components {
+  /* subtle grid background — 가상 오피스 바닥 */
+  .at-grid {
+    background-image:
+      linear-gradient(to right, rgba(109, 139, 255, 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(109, 139, 255, 0.055) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .at-panel {
+    background-color: var(--at-surface-1);
+    border: 1px solid var(--at-border);
+    border-radius: var(--at-radius);
+  }
+
+  /* glass 는 최상위 오버레이에서만 제한적으로 사용 */
+  .at-glass {
+    background-color: color-mix(in srgb, var(--at-surface-2) 82%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--at-border);
+  }
+
+  .at-room-glow-active {
+    box-shadow:
+      inset 0 0 0 1px rgba(139, 122, 255, 0.35),
+      0 0 26px -6px rgba(139, 122, 255, 0.4);
+  }
+  .at-room-glow-waiting {
+    box-shadow:
+      inset 0 0 0 1px rgba(251, 191, 36, 0.4),
+      0 0 26px -6px rgba(251, 191, 36, 0.32);
+  }
+  .at-room-glow-blocked {
+    box-shadow:
+      inset 0 0 0 1px rgba(244, 63, 94, 0.45),
+      0 0 26px -6px rgba(244, 63, 94, 0.32);
+  }
+  .at-room-glow-completed {
+    box-shadow:
+      inset 0 0 0 1px rgba(52, 211, 153, 0.35),
+      0 0 22px -8px rgba(52, 211, 153, 0.3);
+  }
+}
+
+@layer utilities {
+  .at-scroll-thin {
+    scrollbar-width: thin;
+  }
+
+  @keyframes at-pulse-ring {
+    0% {
+      transform: scale(0.9);
+      opacity: 0.7;
+    }
+    70% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  @keyframes at-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes at-sweep {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(240%);
+    }
+  }
+
+  .at-ping {
+    animation: at-pulse-ring 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+  .at-fade-up {
+    animation: at-fade-up 220ms ease-out both;
+  }
+  .at-sweep {
+    animation: at-sweep 1.6s linear infinite;
+  }
+}
+
+/* 모션 최소화 설정을 따른다 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
